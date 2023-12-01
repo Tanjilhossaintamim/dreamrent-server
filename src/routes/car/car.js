@@ -80,5 +80,15 @@ carRouter.delete("/mycar/:id", varifyOwner, async (req, res) => {
     res.send(error);
   }
 });
+carRouter.patch("/mycar/:id", varifyOwner, async (req, res) => {
+  const _id = req.params.id;
+  const owner = req.user._id;
+  try {
+    const result = await Car.updateOne({ _id, owner }, { ...req.body });
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = carRouter;
