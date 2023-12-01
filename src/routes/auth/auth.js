@@ -8,6 +8,7 @@ const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const data = req.body;
+  console.log(data);
   if (!data?.email || !data?.password) {
     return res.status(404).send({ message: "please provide all fields !" });
   }

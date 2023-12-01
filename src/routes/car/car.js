@@ -50,5 +50,35 @@ carRouter.get("/search", async (req, res) => {
     res.send({ cars: results });
   } catch (error) {}
 });
+carRouter.get("/mycar", varifyOwner, async (req, res) => {
+  const owner_id = req.user._id;
+  const page = req.query?.page;
+  const limit = 6;
+  const skip = (parseInt(page) - 1) * limit;
+  const query = {
+    owner: owner_id,
+  };
+  try {
+    const count = await Car.countDocuments(query);
+    const results = await Car.find(query).limit(limit).skip(skip);
+    res.send({ count, results });
+  } catch (error) {
+    res.status(401).send(error);
+  }
+});
+carRouter.delete("/mycar/:id", varifyOwner, async (req, res) => {
+  const _id = req.params.id;
+  const owner = req.user._id;
+  const filter = {
+    _id,
+    owner,
+  };
+  try {
+    const result = await Car.deleteOne(filter);
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = carRouter;
