@@ -34,7 +34,7 @@ bookingRoute.get("/", varifyToken, async (req, res) => {
     user: req.user._id,
   };
   try {
-    const results = await Booking.find(query);
+    const results = await Booking.find(query).populate(['car']);
     res.send(results);
   } catch (error) {}
 });
